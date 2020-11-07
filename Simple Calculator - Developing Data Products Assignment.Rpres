@@ -1,0 +1,97 @@
+Simple Calculator - Developing Data Products Assignment
+========================================================
+author: L.G.Raga
+date:   7th November,2020
+autosize: true
+Breif Introduction
+========================================================
+
+
+Final Assignment of Developing Data Products.
+This app includes :
+- Two number inputs
+- Two Action Buttons
+
+You can find the app here : https://ragalg.shinyapps.io/Simple_CalculatorR/
+
+Widgets Used
+========================================================
+Calculator uses the following widgets listed below :
+
+- numericInput: To input fields to let the user define the values to be calculated.
+
+- actionButton: The required action will be instigated once the one actionbutton is clicked.
+
+Front End Code
+========================================================
+```{r}
+library(shiny)
+
+shinyUI(fluidPage(
+    titlePanel("Simple Calculator"),
+    sidebarLayout(
+        sidebarPanel(
+            helpText("This app is designed for Addition and Subtraction"),            
+            numericInput("fno", label = h6("Enter Your First value"), value = 0),
+            numericInput("sno", label = h6("Enter Your Second value"), value = 0),
+            actionButton("add", label = "Add"),
+            actionButton("sub", label = "Subtract")        
+        ),
+        
+        mainPanel(
+            tabsetPanel(
+                tabPanel("Output",
+                          p(h5("Calculated value:")),
+                         textOutput("answ")
+                ),
+                tabPanel("Additional Information",
+                         p(h4("Simple Calculator:")),
+                         helpText("This app is designed to do Basic Addition and Subtraction between two values"),
+                         HTML("<u><b>Formulae Used: </b></u>
+                                              <br> <br>
+                                              <b> Addition : Answer = First Value + Second Value <br>
+                                              Subtraction : Answer = First Value - Second Value </b>")
+                         
+                )
+            )
+        )
+    )
+))
+```
+
+Server End Code
+========================================================
+```{r}
+library(shiny)
+
+shinyServer(function(input, output) {
+    values <- reactiveValues(aa = 0, ss = 0, a=0, s=0)
+    # Calculating    
+    observeEvent(input$add,{
+        values$aa <- 1
+        values$ss <- 0
+        values$a <- input$fno + input$sno
+    })
+    
+    observeEvent(input$sub,{
+        values$aa <- 0
+        values$ss <- 1
+        values$s <- input$fno - input$sno
+    })
+    
+    # Display calculated answer
+    
+    output$answ <- renderText({
+        if(values$aa){paste("Answer : " , isolate(values$a))}
+        else if(values$ss){paste("Answer : " , isolate(values$s))}
+        else paste("")
+    })
+    
+    
+    
+})
+```
+
+Thankyou!
+========================================================
+I hope you liked my shiny app!
